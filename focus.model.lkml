@@ -1,5 +1,5 @@
 connection: "billing-connection"
-#include: "/focus.explore.lkml"
+include: "/focus.explore.lkml"
 include: "focus.view.lkml"
 include: "datagroup.lkml"
 include: "/focus.dashboard.lookml"
