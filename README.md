@@ -21,4 +21,5 @@ The LookML is written in BigQuery Standard SQL
 Fields to change for downloading this to your instance
 1. The Pricing Export Table Alias
 2. The Detailed Export Table Alias 
-3. The Date Field 
+3. The Date Field
+4. Connection Name you created in your Looker Instasnce 
