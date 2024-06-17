@@ -398,15 +398,6 @@ view: focus {
     value_format_name: usd_0
   }
 
-  # ASK RUPA AND REMOVE
-  # dimension: commitment_discount_type {
-  #   type: string
-  #   description: "Commitment Discount Type is a provider-assigned name to identify the type of commitment-based discount
-  #   applied to the row."
-  #   group_label: "CUDs"
-  #   sql: ${TABLE}.CommitmentDiscountType ;;
-  # }
-
   dimension: list_cost {
     type: number
     description: "List Cost represents the cost calculated by multiplying the list unit price and the corresponding Pricing Quantity."
@@ -526,8 +517,6 @@ view: focus {
     hidden: yes
     sql: ${TABLE}.Tags ;;
   }
-
-  # ASK RUPA and add x_ dimensions
 
   dimension: usage_amount {
     type: string
