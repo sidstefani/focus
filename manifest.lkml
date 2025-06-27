@@ -5,5 +5,8 @@ constant: PRICING_TABLE {
   value: "ivory-vim-309221.billing_export_dataset.cloud_pricing_export"
 }
 constant: DATE {
-  value: "override"
+  value: "2023-05-01"
+}
+constant: CONNECTION {
+  value: "billing-connection"
 }

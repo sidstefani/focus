@@ -82,8 +82,8 @@
     col: 0
     width: 4
     height: 2
-  - title: Costs by Service
-    name: Costs by Service
+  - title: Cost by Service
+    name: Cost by Service
     model: focus
     explore: focus
     type: looker_grid
@@ -282,8 +282,8 @@
     col: 12
     width: 12
     height: 5
-  - title: Cost by Billing Account ID
-    name: Cost by Billing Account ID
+  - title: Cost by Billing Account
+    name: Cost by Billing Account
     model: focus
     explore: focus
     type: looker_grid

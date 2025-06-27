@@ -1,4 +1,4 @@
-include: "focus.view.lkml"
+include: "/views/*.view.lkml"
 
 explore: focus {
   join: gc_Credits {

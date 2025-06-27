@@ -62,8 +62,7 @@ view: focus {
     FROM
      `@{PRICING_TABLE}`, -- updated pricing alias
      UNNEST(list_price.tiered_rates) AS flattened_prices
-    WHERE DATE(export_time) = '2023-05-01')
-    -- replace with a date after you enabled pricing export to use pricing data as of this date
+    WHERE DATE(export_time) = '@{DATE}') -- updated date constant
     SELECT
     usage_export.location.zone AS AvailabilityZone,
     usage_export.billing_account_id AS BillingAccountId,
@@ -119,21 +118,27 @@ view: focus {
 
   dimension: availability_zone {
     type: string
+    description: "An availability zone is a provider-assigned identifier for a physically separated and isolated area within a
+    Region that provides high availability and fault tolerance."
     sql: ${TABLE}.AvailabilityZone ;;
   }
 
   dimension: billing_account_id {
     type: string
+    description: "A Billing Account ID is a provider-assigned identifier for a billing account."
     sql: ${TABLE}.BillingAccountId ;;
   }
 
   dimension: billing_currency {
     type: string
+    description: "Billing currency is an identifier that represents the currency that a charge forresources or services was
+    billed in."
     sql: ${TABLE}.BillingCurrency ;;
   }
 
   dimension_group: billing_period_start {
     type: time
+    description: "Billing Period Start represents the inclusive start date and time of a billing period."
     timeframes: [
       date,
       week,
@@ -147,6 +152,7 @@ view: focus {
 
   dimension_group: billing_period_end {
     type: time
+    description: "Billing Period End represents the inclusive end date and time of a billing period."
     timeframes: [
       date,
       week,
@@ -160,11 +166,13 @@ view: focus {
 
   dimension: charge_description {
     type: string
+    description: "A Charge Description provides a high-level context of a row without requiring additional discovery."
     sql: ${TABLE}.ChargeDescription ;;
   }
 
   dimension_group: charge_period_start {
     type: time
+    description: "Charge Period Start represents the inclusive start date and time within a charge period."
     timeframes: [
       date,
       week,
@@ -177,6 +185,7 @@ view: focus {
 
   dimension_group: charge_period_end {
     type: time
+    description: "Charge Period End represents the exclusive end date and time of a charge period."
     timeframes: [
       date,
       week,
@@ -189,24 +198,30 @@ view: focus {
 
   dimension: commitment_discount_category {
     type: string
+    description: "Commitment Discount Category indicates whether the commitment-based discount identified in the
+    CommitmentDiscountId column is based on usage quantity or cost (aka spend)."
     group_label: "CUDs"
     sql: ${TABLE}.CommitmentDiscountCategory ;;
   }
 
   dimension: commitment_discount_id {
     type: string
+    description: "A Commitment Discount ID is the identifier assigned to a commitment-based discount by the provider."
     group_label: "CUDs"
     sql: ${TABLE}.CommitmentDiscountId ;;
   }
 
   dimension: commitment_discount_name {
     type: string
+    description: "A Commitment Discount Name is the display name assigned to a commitment-based discount."
     group_label: "CUDs"
     sql: ${TABLE}.CommitmentDiscountName ;;
   }
 
   dimension: commitment_discount_type {
     type: string
+    description: "Commitment Discount Type is a provider-assigned name to identify the type of commitment-based discount
+    applied to the row."
     group_label: "CUDs"
     sql: ${TABLE}.CommitmentDiscountType ;;
   }
@@ -219,41 +234,53 @@ view: focus {
 
   dimension: list_unit_price {
     type: string
+    description: "The List Unit Price represents the suggested provider-published unit price for a single Pricing Unit of the
+    associated SKU, exclusive of any discounts."
     sql: ${TABLE}.ListUnitPrice ;;
   }
 
   dimension: pricing_quantity {
     type: string
+    description: "The Pricing Quantity represents the volume of a given SKU associated with a resource or service used or
+    purchased, based on the Pricing Unit."
     sql: ${TABLE}.PricingQuantity ;;
   }
 
   dimension: pricing_unit {
     type: string
+    description: "The List Unit Price represents the suggested provider-published unit price for a single Pricing Unit of the
+    associated SKU, exclusive of any discounts."
     sql: ${TABLE}.PricingUnit ;;
   }
 
   dimension: provider_name {
     type: string
+    description: "A Provider is an entity that makes the resources or services available for purchase."
     sql: ${TABLE}.ProviderName ;;
   }
 
   dimension: publisher_name {
     type: string
+    description: "A Publisher is an entity that produces the resources or services that were purchased."
     sql: ${TABLE}.PublisherName ;;
   }
 
   dimension: region {
     type: string
+    description: "Region is a provider-assigned display name for an isolated geographic area where a resource is
+    provisioned or a service is provided."
     sql: ${TABLE}.Region ;;
   }
 
   dimension: resource_id {
     type: string
+    description: "A Resource ID is an identifier assigned to a resource by the provider."
     sql: ${TABLE}.ResourceId ;;
   }
 
   dimension: resource_name {
     type: string
+    description: "The Resource Name is a display name assigned to aresource."
     sql: ${TABLE}.ResourceName ;;
   }
 
@@ -265,16 +292,20 @@ view: focus {
 
   dimension: service_name {
     type: string
+    description: "A service represents an offering that can be purchased from a provider (e.g., cloud virtual machine, SaaS database, professional services from a systems integrator)."
     sql: ${TABLE}.ServiceName ;;
   }
 
   dimension: sku_id {
     type: string
+    description: "A SKU ID is a unique identifier that defines a provider-supported construct for organizing properties that are
+    common across one or more SKU Prices."
     sql: ${TABLE}.SkuId ;;
   }
 
   dimension: sku_price_id {
     type: string
+    description: "A SKU Price ID is a unique identifier that defines the unit price used to calculate the charge."
     sql: ${TABLE}.SkuPriceId ;;
   }
 
@@ -288,11 +319,6 @@ view: focus {
     type: string
     hidden: yes
     sql: ${TABLE}.UsageAmount ;;
-  }
-
-  dimension: usage_unit {
-    type: string
-    sql: ${TABLE}.UsageUnit ;;
   }
 
   dimension: gc_cost {
@@ -319,6 +345,8 @@ view: focus {
   ###### MEASURES ######
   measure: total_list_cost {
     type: sum
+    description: "Total List Cost represents the cost calculated by summing the multiplied list unit price and the corresponding Pricing
+    Quantity."
     value_format_name: usd_0
     sql: ${list_cost} ;;
   }
@@ -327,11 +355,14 @@ view: focus {
     type: sum
     group_label: "Google Cloud Fields"
     label: "Total Google Cloud Cost"
+    value_format_name: usd_0
     sql: ${gc_cost} ;;
   }
 
   measure: total_usage_amount {
     type: sum
+    description: "The Consumed Quantity represents the volume of a given SKU associated with a resource or service used,
+    based on the Consumed Unit."
     value_format_name: decimal_0
     sql: ${usage_amount} ;;
   }
@@ -381,8 +412,10 @@ view: gc_Credits {
 
 view: ServiceCategory {
   view_label: "Focus"
+
   dimension: service_category {
     type: string
+    description: "The Service Category is the highest-level classification of a service based on the core function of the service."
     sql: ${TABLE} ;;
   }
 }
